@@ -10,14 +10,10 @@ import com.bumptech.glide.Glide;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import androidx.navigation.ui.AppBarConfiguration;
-
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
-
 import com.example.logbook.dbcontext.SqlLiteHelper;
 import com.example.logbook.dbcontext.contract.PictureContract;
 import com.example.logbook.dbcontext.models.PictureModel;
@@ -33,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     int numberOfSavedPicture;
     EditText editImageUrl;
 
-    String defaultUrl = "https://picsum.photos/200/300";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         SqlLiteHelper dbHelper = new SqlLiteHelper(getApplicationContext());
+        // Seed a URL to database
+        ContentValues seedContentValues = new ContentValues();
+        seedContentValues.put(PictureContract.PictureEntry.COLUMN_NAME_URL, "https://picsum.photos/200/300");
+        dbHelper.addImageUrl(seedContentValues);
+
 
         ArrayList<PictureModel> pictureModels = dbHelper.getImageUrls();
         ArrayList<String> savedUrls = (ArrayList<String>) pictureModels.stream().map(PictureModel::getUrl).collect(Collectors.toList());
